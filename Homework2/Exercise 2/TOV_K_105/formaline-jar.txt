@@ -1,0 +1,597 @@
+jobid="run-TOV_K_105-vlab1557-p0003.laboratori.local-es858465-2024.12.28-16.50.55-8594"
+jobtype="default"
+app_title=""
+start_time="Dec 28 2024 17:50:55+0100"
+project_name=""
+output_files="TOV_K_105"
+host="vlab1557-p0003.laboratori.local"
+nprocs=1
+portal_username=""
+local_username="es858465"
+parameter_filename="./TOV_K_105.par"
+executable="./cactus_sim"
+data_directory="TOV_K_105"
+app_visibility="public"
+notification_reports=""
+notification_methods=""
+Cactus_version="4.15.0"
+config_id="config-sim-vlab1557-p0003.laboratori.local-home-LABORATORI-es858465-Desktop-ET_2023_11-Cactus"
+build_id="build-sim-vlab1557-p0003.laboratori.local-es858465-2024.05.24-08.30.35-279313"
+compile_date="May 24 2024"
+compile_time="10:30:36"
+simulation_id="run-TOV_K_105-vlab1557-p0003.laboratori.local-es858465-2024.12.28-16.50.55-8594"
+run_id="run-TOV_K_105-vlab1557-p0003.laboratori.local-es858465-2024.12.28-16.50.55-8594"
+run_user="es858465"
+run_date="Dec 28 2024"
+run_time="17:50:55+0100"
+run_host="vlab1557-p0003.laboratori.local"
+run_title=""
+argc=2
+argv[0]="./cactus_sim"
+argv[1]="./TOV_K_105.par"
+parameter_filename="./TOV_K_105.par"
+parameter_file="# Parameter file from https://github.com/nds-org/jupyter-et/blob/master/CactusTutorial.ipynb
+#
+# Example parameter file for a static TOV star. Everything is evolved, but
+# because this is a solution to the GR and hydro equations, nothing changes
+# much. What can be seen is the initial perturbation (due to numerical errors)
+# ringing down (look at the density maximum), and later numerical errors
+# governing the solution. Try higher resolutions to decrease this error.
+
+# Some basic stuff
+ActiveThorns \= \"Time MoL\"
+ActiveThorns \= \"Coordbase CartGrid3d Boundary StaticConformal\"
+ActiveThorns \= \"SymBase ADMBase TmunuBase HydroBase InitBase ADMCoupling ADMMacros\"
+ActiveThorns \= \"IOUtil\"
+ActiveThorns \= \"Formaline\"
+ActiveThorns \= \"SpaceMask CoordGauge Constants LocalReduce aeilocalinterp LoopControl\"
+ActiveThorns \= \"Carpet CarpetLib CarpetReduce CarpetRegrid2 CarpetInterp\"
+ActiveThorns \= \"CarpetIOASCII CarpetIOScalar CarpetIOHDF5 CarpetIOBasic\"
+
+# Finalize
+Cactus::terminate           \= \"time\"
+Cactus::cctk_final_time     \= 400 # divide by ~203 to get ms
+
+# Termination Trigger
+ActiveThorns \= \"TerminationTrigger\"
+TerminationTrigger::max_walltime \= 24          # hours
+TerminationTrigger::on_remaining_walltime \= 0  # minutes
+TerminationTrigger::check_file_every \= 512
+TerminationTrigger::termination_file \= \"TerminationTrigger.txt\"
+TerminationTrigger::termination_from_file   \= \"yes\"
+TerminationTrigger::create_termination_file \= \"yes\"
+
+# grid parameters
+Carpet::domain_from_coordbase \= \"yes\"
+CartGrid3D::type         \= \"coordbase\"
+CartGrid3D::domain       \= \"full\"
+CartGrid3D::avoid_origin \= \"no\"
+CoordBase::xmin \=  0.0
+CoordBase::ymin \=  0.0
+CoordBase::zmin \=  0.0
+CoordBase::xmax \= 24.0
+CoordBase::ymax \= 24.0
+CoordBase::zmax \= 24.0
+# Change these parameters to change resolution. The ?max settings above
+# have to be multiples of these. 'dx' is the size of one cell in x-direction.
+# Making this smaller means using higher resolution, because more points will
+# be used to cover the same space.
+CoordBase::dx   \=   2.0
+CoordBase::dy   \=   2.0
+CoordBase::dz   \=   2.0
+
+CarpetRegrid2::regrid_every \=   0
+CarpetRegrid2::num_centres  \=   1
+CarpetRegrid2::num_levels_1 \=   2
+CarpetRegrid2::radius_1[1]  \= 12.0
+
+
+CoordBase::boundary_size_x_lower        \= 3
+CoordBase::boundary_size_y_lower        \= 3
+CoordBase::boundary_size_z_lower        \= 3
+CoordBase::boundary_size_x_upper        \= 3
+CoordBase::boundary_size_y_upper        \= 3
+CoordBase::boundary_size_z_upper        \= 3
+CoordBase::boundary_shiftout_x_lower    \= 1
+CoordBase::boundary_shiftout_y_lower    \= 1
+CoordBase::boundary_shiftout_z_lower    \= 1
+CoordBase::boundary_shiftout_x_upper    \= 0
+CoordBase::boundary_shiftout_y_upper    \= 0
+CoordBase::boundary_shiftout_z_upper    \= 0
+
+
+ActiveThorns \= \"ReflectionSymmetry\"
+
+ReflectionSymmetry::reflection_x \= \"yes\"
+ReflectionSymmetry::reflection_y \= \"yes\"
+ReflectionSymmetry::reflection_z \= \"yes\"
+ReflectionSymmetry::avoid_origin_x \= \"no\"
+ReflectionSymmetry::avoid_origin_y \= \"no\"
+ReflectionSymmetry::avoid_origin_z \= \"no\"
+
+# storage and coupling
+TmunuBase::stress_energy_storage \= yes
+TmunuBase::stress_energy_at_RHS  \= yes
+TmunuBase::timelevels            \=  1
+TmunuBase::prolongation_type     \= none
+
+
+HydroBase::timelevels            \= 3
+
+ADMMacros::spatial_order \= 4
+
+SpaceMask::use_mask      \= \"yes\"
+
+Carpet::enable_all_storage       \= no
+Carpet::use_buffer_zones         \= \"yes\"
+
+Carpet::poison_new_timelevels    \= \"yes\"
+Carpet::check_for_poison         \= \"no\"
+
+Carpet::init_3_timelevels        \= no
+Carpet::init_fill_timelevels     \= \"yes\"
+
+CarpetLib::poison_new_memory \= \"yes\"
+CarpetLib::poison_value      \= 114
+
+# system specific Carpet paramters
+Carpet::max_refinement_levels    \= 10
+driver::ghost_size               \= 3
+Carpet::prolongation_order_space \= 3
+Carpet::prolongation_order_time  \= 2
+
+# Time integration
+time::dtfac \= 0.25
+
+MoL::ODE_Method             \= \"rk4\"
+MoL::MoL_Intermediate_Steps \= 4
+MoL::MoL_Num_Scratch_Levels \= 1
+
+# check all physical variables for NaNs
+#  This can save you computing time, so it's not a bad idea to do this
+#  once in a while.
+ActiveThorns \= \"NaNChecker\"
+NaNChecker::check_every \= 16384
+NaNChecker::action_if_found \= \"terminate\" #\"terminate\", \"just warn\", \"abort\"
+NaNChecker::check_vars \= \"ADMBase::metric ADMBase::lapse ADMBase::shift HydroBase::rho HydroBase::eps HydroBase::press HydroBase::vel\"
+
+# Hydro paramters
+
+ActiveThorns \= \"EOS_Omni GRHydro\"
+
+HydroBase::evolution_method      \= \"GRHydro\"
+
+GRHydro::riemann_solver         \= \"Marquina\"
+GRHydro::GRHydro_eos_type       \= \"Polytype\"
+GRHydro::GRHydro_eos_table      \= \"2D_Polytrope\"
+GRHydro::recon_method           \= \"ppm\"
+GRHydro::GRHydro_stencil        \= 3
+GRHydro::bound                  \= \"none\"
+GRHydro::rho_abs_min            \= 1.e-10
+# Parameter controlling finite difference order of the Christoffel symbols in GRHydro
+GRHydro::sources_spatial_order  \= 4
+
+# Curvature evolution parameters
+
+ActiveThorns \= \"GenericFD NewRad\"
+ActiveThorns \= \"ML_BSSN ML_BSSN_Helper\"
+ADMBase::evolution_method        \= \"ML_BSSN\"
+ADMBase::lapse_evolution_method  \= \"ML_BSSN\"
+ADMBase::shift_evolution_method  \= \"ML_BSSN\"
+ADMBase::dtlapse_evolution_method\= \"ML_BSSN\"
+ADMBase::dtshift_evolution_method\= \"ML_BSSN\"
+
+ML_BSSN::timelevels \= 3
+
+ML_BSSN::harmonicN           \= 1      # 1+log
+ML_BSSN::harmonicF           \= 2.0    # 1+log
+ML_BSSN::evolveA             \= 1
+ML_BSSN::evolveB            \= 1
+ML_BSSN::ShiftGammaCoeff     \= 0.75
+ML_BSSN::BetaDriver          \= 2.66
+ML_BSSN::advectLapse 	     \= 0.0
+ML_BSSN::advectShift 	     \= 0.0
+
+
+ML_BSSN::my_initial_boundary_condition \= \"extrapolate-gammas\"
+ML_BSSN::my_rhs_boundary_condition     \= \"NewRad\"
+
+# Some dissipation to get rid of high-frequency noise
+ActiveThorns \= \"SphericalSurface Dissipation\"
+Dissipation::verbose   \= \"no\"
+Dissipation::epsdis   \= 0.01
+Dissipation::vars \= \"
+        ML_BSSN::ML_log_confac
+        ML_BSSN::ML_metric
+        ML_BSSN::ML_curv
+        ML_BSSN::ML_trace_curv
+        ML_BSSN::ML_Gamma
+        ML_BSSN::ML_lapse
+        ML_BSSN::ML_shift
+\"
+
+
+# init parameters
+InitBase::initial_data_setup_method \= \"init_some_levels\"
+
+# Use TOV as initial data
+ActiveThorns \= \"TOVSolver\"
+
+HydroBase::initial_hydro         \= \"tov\"
+ADMBase::initial_data            \= \"tov\"
+ADMBase::initial_lapse           \= \"tov\"
+ADMBase::initial_shift           \= \"tov\"
+ADMBase::initial_dtlapse         \= \"zero\"
+ADMBase::initial_dtshift         \= \"zero\"
+
+# Parameters for initial star
+TOVSolver::TOV_Rho_Central[0] \= 1.28e-3
+TOVSolver::TOV_Gamma          \= 2
+TOVSolver::TOV_K              \= 100
+
+# Set equation of state for evolution
+EOS_Omni::poly_gamma                   \= 2
+EOS_Omni::poly_k                       \= 105
+EOS_Omni::gl_gamma                     \= 2
+EOS_Omni::gl_k                         \= 105
+
+
+# I/O
+
+# Use (create if necessary) an output directory named like the
+# parameter file (minus the .par)
+IO::out_dir             \= ${parfile}
+
+# Write one file overall per output (variable/group)
+# In production runs, comment this or set to \"proc\" to get one file
+# per MPI process
+IO::out_mode            \= \"onefile\"
+
+# Some screen output
+IOBasic::outInfo_every \= 512
+IOBasic::outInfo_vars  \= \"Carpet::physical_time_per_hour HydroBase::rho{reductions\='maximum'}\"
+
+# Scalar output
+IOScalar::outScalar_every    \= 512
+IOScalar::one_file_per_group \= \"yes\"
+IOScalar::outScalar_reductions \= \"norm1 norm2 norm_inf sum maximum minimum\"
+IOScalar::outScalar_vars     \= \"
+ HydroBase::rho{reductions\='maximum'}
+ HydroBase::press{reductions\='maximum'}
+ HydroBase::eps{reductions\='minimum maximum'}
+ HydroBase::vel{reductions\='minimum maximum'}
+ HydroBase::w_lorentz{reductions\='minimum maximum'}
+ ADMBase::lapse{reductions\='minimum maximum'}
+ ADMBase::shift{reductions\='minimum maximum'}
+ ML_BSSN::ML_Ham{reductions\='norm1 norm2 maximum minimum norm_inf'}
+ ML_BSSN::ML_mom{reductions\='norm1 norm2 maximum minimum norm_inf'}
+ GRHydro::dens{reductions\='minimum maximum sum'}
+ Carpet::timing{reductions\='average'}
+\"
+
+
+#HDF5 output
+CarpetIOHDF5::output_buffer_points \= \"no\"
+
+# 1D HDF5 output
+CarpetIOHDF5::out1D_every \= 1024
+CarpetIOHDF5::out1D_vars \= \"
+ HydroBase::rho
+ ADMBase::lapse
+ ADMBase::shift
+ ML_BSSN::ML_Ham
+ ML_BSSN::ML_mom
+\"
+
+# 2D HDF5 output
+CarpetIOHDF5::out2D_every \= 2048
+CarpetIOHDF5::out2D_vars \= \"
+ HydroBase::rho
+ HydroBase::eps
+ HydroBase::vel
+ HydroBase::w_lorentz
+ ADMBase::lapse
+ ADMBase::shift
+ ML_BSSN::ML_Ham
+ ML_BSSN::ML_mom
+ \"
+"
+current_dir="/home/LABORATORI/es858465/Desktop/notebooks/Homework2"
+out_dir="TOV_K_105"
+thorns/ADMBase="active"
+thorns/ADMCoupling="active"
+thorns/ADMMacros="active"
+thorns/AEILocalInterp="active"
+thorns/Boundary="active"
+thorns/Cactus="active"
+thorns/Carpet="active"
+thorns/CarpetInterp="active"
+thorns/CarpetIOASCII="active"
+thorns/CarpetIOBasic="active"
+thorns/CarpetIOHDF5="active"
+thorns/CarpetIOScalar="active"
+thorns/CarpetLib="active"
+thorns/CarpetReduce="active"
+thorns/CarpetRegrid2="active"
+thorns/CarpetSlab="inactive"
+thorns/CartGrid3D="active"
+thorns/Constants="active"
+thorns/CoordBase="active"
+thorns/CoordGauge="active"
+thorns/CycleClock="active"
+thorns/Dissipation="active"
+thorns/EOS_Base="active"
+thorns/EOS_Omni="active"
+thorns/EOS_Polytrope="active"
+thorns/Formaline="active"
+thorns/Fortran="inactive"
+thorns/GenericFD="active"
+thorns/GRHydro="active"
+thorns/GRHydro_InitData="inactive"
+thorns/HDF5="active"
+thorns/hwloc="active"
+thorns/HydroBase="active"
+thorns/InitBase="active"
+thorns/IOUtil="active"
+thorns/LocalInterp="inactive"
+thorns/LocalReduce="active"
+thorns/LoopControl="active"
+thorns/ML_BSSN="active"
+thorns/ML_BSSN_Helper="active"
+thorns/MoL="active"
+thorns/MPI="active"
+thorns/NaNChecker="active"
+thorns/NewRad="active"
+thorns/pthreads="active"
+thorns/PUGH="inactive"
+thorns/ReflectionSymmetry="active"
+thorns/Slab="inactive"
+thorns/SpaceMask="active"
+thorns/SphericalSurface="active"
+thorns/StaticConformal="active"
+thorns/SymBase="active"
+thorns/SystemStatistics="inactive"
+thorns/TerminationTrigger="active"
+thorns/Time="active"
+thorns/Timers="active"
+thorns/TmunuBase="active"
+thorns/TOVSolver="active"
+thorns/Vectors="active"
+thorns/zlib="active"
+thorn_arrangements/ADMBase="EinsteinBase"
+thorn_arrangements/ADMCoupling="EinsteinBase"
+thorn_arrangements/ADMMacros="EinsteinBase"
+thorn_arrangements/AEILocalInterp="Numerical"
+thorn_arrangements/Boundary="CactusBase"
+thorn_arrangements/Carpet="Carpet"
+thorn_arrangements/CarpetIOASCII="Carpet"
+thorn_arrangements/CarpetIOBasic="Carpet"
+thorn_arrangements/CarpetIOHDF5="Carpet"
+thorn_arrangements/CarpetIOScalar="Carpet"
+thorn_arrangements/CarpetInterp="Carpet"
+thorn_arrangements/CarpetLib="Carpet"
+thorn_arrangements/CarpetReduce="Carpet"
+thorn_arrangements/CarpetRegrid2="Carpet"
+thorn_arrangements/CarpetSlab="Carpet"
+thorn_arrangements/CartGrid3D="CactusBase"
+thorn_arrangements/Constants="EinsteinBase"
+thorn_arrangements/CoordBase="CactusBase"
+thorn_arrangements/CoordGauge="EinsteinBase"
+thorn_arrangements/CycleClock="Carpet"
+thorn_arrangements/Dissipation="CactusNumerical"
+thorn_arrangements/EOS_Base="EinsteinBase"
+thorn_arrangements/EOS_Omni="EinsteinEOS"
+thorn_arrangements/EOS_Polytrope="EinsteinEOS"
+thorn_arrangements/Formaline="CactusUtils"
+thorn_arrangements/Fortran="CactusBase"
+thorn_arrangements/GRHydro="EinsteinEvolve"
+thorn_arrangements/GRHydro_InitData="EinsteinEvolve"
+thorn_arrangements/GenericFD="KrancNumericalTools"
+thorn_arrangements/HDF5="ExternalLibraries"
+thorn_arrangements/HydroBase="EinsteinBase"
+thorn_arrangements/IOUtil="CactusBase"
+thorn_arrangements/InitBase="CactusBase"
+thorn_arrangements/LocalInterp="CactusNumerical"
+thorn_arrangements/LocalReduce="CactusNumerical"
+thorn_arrangements/LoopControl="Carpet"
+thorn_arrangements/ML_BSSN="McLachlan"
+thorn_arrangements/ML_BSSN_Helper="McLachlan"
+thorn_arrangements/MPI="ExternalLibraries"
+thorn_arrangements/MoL="CactusNumerical"
+thorn_arrangements/NaNChecker="CactusUtils"
+thorn_arrangements/NewRad="EinsteinEvolve"
+thorn_arrangements/PUGH="CactusPUGH"
+thorn_arrangements/ReflectionSymmetry="CactusNumerical"
+thorn_arrangements/Slab="CactusNumerical"
+thorn_arrangements/SpaceMask="CactusNumerical"
+thorn_arrangements/SphericalSurface="CactusNumerical"
+thorn_arrangements/StaticConformal="EinsteinBase"
+thorn_arrangements/SymBase="CactusBase"
+thorn_arrangements/SystemStatistics="CactusUtils"
+thorn_arrangements/TOVSolver="EinsteinInitialData"
+thorn_arrangements/TerminationTrigger="CactusUtils"
+thorn_arrangements/Time="CactusBase"
+thorn_arrangements/Timers="Carpet"
+thorn_arrangements/TmunuBase="EinsteinBase"
+thorn_arrangements/Vectors="CactusUtils"
+thorn_arrangements/hwloc="ExternalLibraries"
+thorn_arrangements/pthreads="ExternalLibraries"
+thorn_arrangements/zlib="ExternalLibraries"
+parameters/ADMBase::dtlapse_evolution_method="ML_BSSN"
+parameters/ADMBase::dtshift_evolution_method="ML_BSSN"
+parameters/ADMBase::evolution_method="ML_BSSN"
+parameters/ADMBase::initial_data="tov"
+parameters/ADMBase::initial_dtlapse="zero"
+parameters/ADMBase::initial_dtshift="zero"
+parameters/ADMBase::initial_lapse="tov"
+parameters/ADMBase::initial_shift="tov"
+parameters/ADMBase::lapse_evolution_method="ML_BSSN"
+parameters/ADMBase::shift_evolution_method="ML_BSSN"
+parameters/ADMMacros::spatial_order=4
+parameters/Cactus::cctk_final_time=400
+parameters/Cactus::terminate="time"
+parameters/Carpet::check_for_poison=no
+parameters/Carpet::domain_from_coordbase=yes
+parameters/Carpet::enable_all_storage=no
+parameters/Carpet::ghost_size=3
+parameters/Carpet::init_3_timelevels=no
+parameters/Carpet::init_fill_timelevels=yes
+parameters/Carpet::max_refinement_levels=10
+parameters/Carpet::poison_new_timelevels=yes
+parameters/Carpet::prolongation_order_space=3
+parameters/Carpet::prolongation_order_time=2
+parameters/Carpet::use_buffer_zones=yes
+parameters/CarpetIOBasic::outInfo_every=512
+parameters/CarpetIOBasic::outInfo_vars="Carpet::physical_time_per_hour HydroBase::rho{reductions\='maximum'}"
+parameters/CarpetIOHDF5::out1D_every=1024
+parameters/CarpetIOHDF5::out1D_vars="
+ HydroBase::rho
+ ADMBase::lapse
+ ADMBase::shift
+ ML_BSSN::ML_Ham
+ ML_BSSN::ML_mom
+"
+parameters/CarpetIOHDF5::out2D_every=2048
+parameters/CarpetIOHDF5::out2D_vars="
+ HydroBase::rho
+ HydroBase::eps
+ HydroBase::vel
+ HydroBase::w_lorentz
+ ADMBase::lapse
+ ADMBase::shift
+ ML_BSSN::ML_Ham
+ ML_BSSN::ML_mom
+ "
+parameters/CarpetIOHDF5::output_buffer_points=no
+parameters/CarpetIOScalar::one_file_per_group=yes
+parameters/CarpetIOScalar::outScalar_every=512
+parameters/CarpetIOScalar::outScalar_reductions="norm1 norm2 norm_inf sum maximum minimum"
+parameters/CarpetIOScalar::outScalar_vars="
+ HydroBase::rho{reductions\='maximum'}
+ HydroBase::press{reductions\='maximum'}
+ HydroBase::eps{reductions\='minimum maximum'}
+ HydroBase::vel{reductions\='minimum maximum'}
+ HydroBase::w_lorentz{reductions\='minimum maximum'}
+ ADMBase::lapse{reductions\='minimum maximum'}
+ ADMBase::shift{reductions\='minimum maximum'}
+ ML_BSSN::ML_Ham{reductions\='norm1 norm2 maximum minimum norm_inf'}
+ ML_BSSN::ML_mom{reductions\='norm1 norm2 maximum minimum norm_inf'}
+ GRHydro::dens{reductions\='minimum maximum sum'}
+ Carpet::timing{reductions\='average'}
+"
+parameters/CarpetLib::poison_new_memory=yes
+parameters/CarpetLib::poison_value=114
+parameters/CarpetRegrid2::num_centres=1
+parameters/CarpetRegrid2::num_levels_1=2
+parameters/CarpetRegrid2::radius_1[1]=12
+parameters/CarpetRegrid2::regrid_every=0
+parameters/CartGrid3D::avoid_origin=no
+parameters/CoordBase::boundary_shiftout_x_lower=1
+parameters/CoordBase::boundary_shiftout_x_upper=0
+parameters/CoordBase::boundary_shiftout_y_lower=1
+parameters/CoordBase::boundary_shiftout_y_upper=0
+parameters/CoordBase::boundary_shiftout_z_lower=1
+parameters/CoordBase::boundary_shiftout_z_upper=0
+parameters/CoordBase::boundary_size_x_lower=3
+parameters/CoordBase::boundary_size_x_upper=3
+parameters/CoordBase::boundary_size_y_lower=3
+parameters/CoordBase::boundary_size_y_upper=3
+parameters/CoordBase::boundary_size_z_lower=3
+parameters/CoordBase::boundary_size_z_upper=3
+parameters/CoordBase::dx=2
+parameters/CoordBase::dy=2
+parameters/CoordBase::dz=2
+parameters/CoordBase::xmax=24
+parameters/CoordBase::xmin=0
+parameters/CoordBase::ymax=24
+parameters/CoordBase::ymin=0
+parameters/CoordBase::zmax=24
+parameters/CoordBase::zmin=0
+parameters/Dissipation::epsdis=0.01
+parameters/Dissipation::vars="
+        ML_BSSN::ML_log_confac
+        ML_BSSN::ML_metric
+        ML_BSSN::ML_curv
+        ML_BSSN::ML_trace_curv
+        ML_BSSN::ML_Gamma
+        ML_BSSN::ML_lapse
+        ML_BSSN::ML_shift
+"
+parameters/Dissipation::verbose=no
+parameters/EOS_Omni::gl_gamma=2
+parameters/EOS_Omni::gl_k=105
+parameters/EOS_Omni::poly_gamma=2
+parameters/EOS_Omni::poly_k=105
+parameters/GRHydro::GRHydro_eos_table="2D_Polytrope"
+parameters/GRHydro::GRHydro_eos_type="Polytype"
+parameters/GRHydro::GRHydro_stencil=3
+parameters/GRHydro::bound="none"
+parameters/GRHydro::recon_method="ppm"
+parameters/GRHydro::rho_abs_min=1e-10
+parameters/GRHydro::riemann_solver="Marquina"
+parameters/GRHydro::sources_spatial_order=4
+parameters/HydroBase::evolution_method="GRHydro"
+parameters/HydroBase::hydro_excision=1
+parameters/HydroBase::initial_hydro="tov"
+parameters/HydroBase::timelevels=3
+parameters/IO::out_dir="TOV_K_105"
+parameters/IO::out_mode="onefile"
+parameters/InitBase::initial_data_setup_method="init_some_levels"
+parameters/ML_BSSN::advectLapse=0
+parameters/ML_BSSN::advectShift=0
+parameters/ML_BSSN::betaDriver=2.66
+parameters/ML_BSSN::evolveA=1
+parameters/ML_BSSN::evolveB=1
+parameters/ML_BSSN::harmonicF=2
+parameters/ML_BSSN::harmonicN=1
+parameters/ML_BSSN::my_initial_boundary_condition="extrapolate-gammas"
+parameters/ML_BSSN::my_rhs_boundary_condition="NewRad"
+parameters/ML_BSSN::shiftGammaCoeff=0.75
+parameters/ML_BSSN::timelevels=3
+parameters/MethodOfLines::MoL_Num_Constrained_Vars=57
+parameters/MethodOfLines::MoL_Num_Evolved_Vars=30
+parameters/MethodOfLines::MoL_Num_SaveAndRestore_Vars=16
+parameters/MethodOfLines::MoL_Num_Scratch_Levels=1
+parameters/MoL::MoL_Intermediate_Steps=4
+parameters/MoL::ODE_Method="rk4"
+parameters/NaNChecker::action_if_found="terminate"
+parameters/NaNChecker::check_every=16384
+parameters/NaNChecker::check_vars="ADMBase::metric ADMBase::lapse ADMBase::shift HydroBase::rho HydroBase::eps HydroBase::press HydroBase::vel"
+parameters/ReflectionSymmetry::avoid_origin_x=no
+parameters/ReflectionSymmetry::avoid_origin_y=no
+parameters/ReflectionSymmetry::avoid_origin_z=no
+parameters/ReflectionSymmetry::reflection_x=yes
+parameters/ReflectionSymmetry::reflection_y=yes
+parameters/ReflectionSymmetry::reflection_z=yes
+parameters/SpaceMask::use_mask=yes
+parameters/TOVSolver::TOV_Gamma=2
+parameters/TOVSolver::TOV_K=100
+parameters/TOVSolver::TOV_Rho_Central[0]=0.00128
+parameters/TerminationTrigger::check_file_every=512
+parameters/TerminationTrigger::create_termination_file=yes
+parameters/TerminationTrigger::max_walltime=24
+parameters/TerminationTrigger::on_remaining_walltime=0
+parameters/TerminationTrigger::termination_file="TerminationTrigger.txt"
+parameters/TerminationTrigger::termination_from_file=yes
+parameters/Time::dtfac=0.25
+parameters/TmunuBase::prolongation_type="none"
+parameters/TmunuBase::stress_energy_at_RHS=yes
+parameters/TmunuBase::stress_energy_storage=yes
+parameters/TmunuBase::timelevels=1
+parameters/grid::domain="full"
+parameters/grid::type="coordbase"
+run_date="Dec 28 2024"
+run_time="17:50:57+0100"
+cctk_iteration=0
+cctk_time=0
+simulation="done"
+run_date="Dec 28 2024"
+run_time="18:50:58+0100"
+cctk_iteration=276736
+cctk_time=270.25
+simulation="done"
+run_date="Dec 28 2024"
+run_time="19:20:11+0100"
+cctk_iteration=409600
+cctk_time=400
+simulation="done"

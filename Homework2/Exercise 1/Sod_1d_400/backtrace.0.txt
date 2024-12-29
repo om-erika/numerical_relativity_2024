@@ -1,0 +1,21 @@
+Backtrace from rank 0 pid 280668:
+1. CarpetLib::signal_handler(int)   [./cactus_sim(_ZN9CarpetLib14signal_handlerEi+0xb3) [0x558e1dccf973]]
+2. /lib/x86_64-linux-gnu/libc.so.6(+0x43090) [0x7fb7a01d8090]
+3. /lib/x86_64-linux-gnu/libc.so.6(gsignal+0xcb) [0x7fb7a01d800b]
+4. /lib/x86_64-linux-gnu/libc.so.6(abort+0x12b) [0x7fb7a01b7859]
+5. ./cactus_sim(+0xeb2c9f) [0x558e1e746c9f]
+6. CarpetIOHDF5::IOHDF5<1>::OpenFile(_cGH const*, int, int, int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, CarpetLib::vect<int, 1> const&, bool, bool, long&, long&)   [./cactus_sim(_ZN12CarpetIOHDF56IOHDF5ILi1EE8OpenFileEPK4_cGHiiiNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESA_RKN9CarpetLib4vectIiLi1EEEbbRlSG_+0x57f) [0x558e1dc9f7ef]]
+7. CarpetIOHDF5::IOHDF5<1>::OutputDirection(_cGH const*, int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, CarpetLib::vect<int, 1> const&, bool, bool)   [./cactus_sim(_ZN12CarpetIOHDF56IOHDF5ILi1EE15OutputDirectionEPK4_cGHiNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESA_RKN9CarpetLib4vectIiLi1EEEbb+0x323) [0x558e1dcbeca3]]
+8. CarpetIOHDF5::IOHDF5<1>::OutputVarAs(_cGH const*, char const*, char const*)   [./cactus_sim(_ZN12CarpetIOHDF56IOHDF5ILi1EE11OutputVarAsEPK4_cGHPKcS6_+0x7dd) [0x558e1dcc10cd]]
+9. CarpetIOHDF5::IOHDF5<1>::TriggerOutput(_cGH const*, int)   [./cactus_sim(_ZN12CarpetIOHDF56IOHDF5ILi1EE13TriggerOutputEPK4_cGHi+0x1d3) [0x558e1dcc1513]]
+10. CarpetIOHDF5::IOHDF5<1>::OutputGH(_cGH const*)   [./cactus_sim(_ZN12CarpetIOHDF56IOHDF5ILi1EE8OutputGHEPK4_cGH+0x280) [0x558e1dcc1930]]
+11. Carpet::OutputGH(_cGH const*)   [./cactus_sim(_ZN6Carpet8OutputGHEPK4_cGH+0xed) [0x558e1dc001bd]]
+12. ./cactus_sim(+0x366e59) [0x558e1dbfae59]
+13. Carpet::Initialise(tFleshConfig*)   [./cactus_sim(_ZN6Carpet10InitialiseEP12tFleshConfig+0x16c5) [0x558e1dbfe155]]
+14. ./cactus_sim(main+0x49) [0x558e1d9a0c89]
+15. /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf3) [0x7fb7a01b9083]
+16. ./cactus_sim(_start+0x2e) [0x558e1d9a133e]
+
+The hexadecimal addresses in this backtrace can also be interpreted
+with a debugger (e.g. gdb), or with the 'addr2line' (or 'gaddr2line')
+command line tool: 'addr2line -e cactus_sim <address>'.
